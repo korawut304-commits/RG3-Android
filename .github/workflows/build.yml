@@ -20,7 +20,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Prepare resources
-        run: mkdir -p android-res
+        run: |
+          mkdir -p android-res/values
+          echo '<resources></resources>' > android-res/values/strings.xml
+          ls -laR android-res
 
       - name: Build Android APK
         uses: love-actions/love-actions-android@v2
