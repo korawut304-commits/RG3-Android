@@ -1,0 +1,43 @@
+
+name: Build RG3 Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'game.love'
+      - '.github/workflows/build.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get game files
+        uses: actions/checkout@v4
+
+      - name: Prepare resources
+        run: mkdir -p android-res
+
+      - name: Build Android APK
+        uses: love-actions/love-actions-android@v2
+        with:
+          app-name: "RG 3.6"
+          bundle-id: "com.korawut.rg36"
+          resource-path: "./android-res"
+          love-ref: "11.5"
+          love-package: "./game.love"
+          product-name: "rg3"
+          version-string: "3.6.0"
+          version-code: 36
+          output-folder: "./build"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: RG3-Android-APK
+          path: build/*.apk
+          if-no-files-found: error
